@@ -15,20 +15,23 @@ import (
 // PromptTemplates allow a prompt to be customized following stdlib text/template syntax.
 // Custom state, colors and background color are available for use inside the templates and are documented inside the Variable section of the docs.
 //
-// Examples
+// # Examples
 //
 // text/templates use a special notation to display programmable content.
 // Using the double bracket notation, the value can be printed with specific helper functions.
 // For example
 //
 // This displays the value given to the template as pure, unstylized text.
-// 	'{{ . }}'
+//
+//	'{{ . }}'
 //
 // This displays the value colored in cyan
-// 	'{{ . | cyan }}'
+//
+//	'{{ . | cyan }}'
 //
 // This displays the value colored in red with a cyan background-color
-// 	'{{ . | red | cyan }}'
+//
+//	'{{ . | red | cyan }}'
 //
 // See the doc of text/template for more info: https://golang.org/pkg/text/template/
 type PromptTemplates struct {
@@ -139,7 +142,7 @@ func (p *Prompt) Run() (string, error) {
 	}
 
 	// Taking over the cursor, so stop showing it.
-	rl.Write([]byte(hideCursor))
+	_, _ = rl.Write([]byte(hideCursor))
 	sb := screenbuf.New(rl)
 
 	validFn := func(x string) error {
@@ -185,11 +188,11 @@ func (p *Prompt) Run() (string, error) {
 		prompt = append(prompt, []byte(echo)...)
 
 		sb.Reset()
-		sb.Write(prompt)
+		_, _ = sb.Write(prompt)
 
 		if inputErr != nil {
 			validation := render(p.Templates.validation, inputErr)
-			sb.Write(validation)
+			_, _ = sb.Write(validation)
 			inputErr = nil
 		}
 
@@ -224,9 +227,9 @@ func (p *Prompt) Run() (string, error) {
 		}
 
 		sb.Reset()
-		sb.WriteString("")
+		_, _ = sb.WriteString("")
 		sb.Flush()
-		rl.Write([]byte(showCursor))
+		_, _ = rl.Write([]byte(showCursor))
 		rl.Close()
 
 		return "", err
@@ -255,11 +258,11 @@ func (p *Prompt) Run() (string, error) {
 		clearScreen(sb)
 	} else {
 		sb.Reset()
-		sb.Write(prompt)
+		_, _ = sb.Write(prompt)
 		sb.Flush()
 	}
 
-	rl.Write([]byte(showCursor))
+	_, _ = rl.Write([]byte(showCursor))
 	rl.Close()
 
 	return cur.Get(), err

@@ -55,7 +55,7 @@ type SelectKeys struct {
 // SelectTemplates allow a select list to be customized following stdlib text/template syntax.
 // Custom state, colors and background color are available for use inside the templates and are documented inside the Variable section of the docs.
 //
-// Examples
+// # Examples
 //
 // text/templates use a special notation to display programmable content.
 // Using the double bracket notation, the value can be printed with specific helper functions.
@@ -63,17 +63,20 @@ type SelectKeys struct {
 //
 // This displays the value given to the template as pure, unstylized text. Structs are transformed to string
 // with this notation.
-// 	'{{ . }}'
+//
+//	'{{ . }}'
 //
 // This displays the name property of the value colored in cyan
-// 	'{{ .Name | cyan }}'
+//
+//	'{{ .Name | cyan }}'
 //
 // This displays the label property of value colored in red with a cyan background-color
-// 	'{{ .Label | red | cyan }}'
+//
+//	'{{ .Label | red | cyan }}'
 //
 // See the doc of text/template for more info: https://golang.org/pkg/text/template/
 //
-// Notes
+// # Notes
 //
 // Setting any of these templates will remove the icons from the default templates.
 // They must be added back in each of their specific templates.
@@ -243,7 +246,7 @@ func (s *Select) innerRun(cursorPos, scroll int, top rune) (int, string, error) 
 		return 0, "", err
 	}
 
-	rl.Write([]byte(hideCursor))
+	_, _ = rl.Write([]byte(hideCursor))
 	sb := screenbuf.New(rl)
 
 	cur := NewCursor("", s.Pointer, false)
@@ -309,14 +312,14 @@ func (s *Select) innerRun(cursorPos, scroll int, top rune) (int, string, error) 
 
 		if searchMode {
 			header := SearchPrompt + cur.Format()
-			sb.WriteString(header)
+			_, _ = sb.WriteString(header)
 		} else if !s.HideHelp {
 			help := s.renderHelp(canSearch)
-			sb.Write(help)
+			_, _ = sb.Write(help)
 		}
 
 		label := render(s.Templates.label, s.Label)
-		sb.Write(label)
+		_, _ = sb.Write(label)
 
 		items, idx := s.list.Items()
 		last := len(items) - 1
@@ -345,18 +348,18 @@ func (s *Select) innerRun(cursorPos, scroll int, top rune) (int, string, error) 
 				output = append(output, render(s.Templates.inactive, item)...)
 			}
 
-			sb.Write(output)
+			_, _ = sb.Write(output)
 		}
 
 		if idx == list.NotFound {
-			sb.WriteString("")
-			sb.WriteString("No results")
+			_, _ = sb.WriteString("")
+			_, _ = sb.WriteString("No results")
 		} else {
 			active := items[idx]
 
 			details := s.renderDetails(active)
 			for _, d := range details {
-				sb.Write(d)
+				_, _ = sb.Write(d)
 			}
 		}
 
@@ -392,9 +395,9 @@ func (s *Select) innerRun(cursorPos, scroll int, top rune) (int, string, error) 
 		}
 
 		sb.Reset()
-		sb.WriteString("")
+		_, _ = sb.WriteString("")
 		sb.Flush()
-		rl.Write([]byte(showCursor))
+		_, _ = rl.Write([]byte(showCursor))
 		rl.Close()
 
 		return 0, "", err
@@ -407,11 +410,11 @@ func (s *Select) innerRun(cursorPos, scroll int, top rune) (int, string, error) 
 		clearScreen(sb)
 	} else {
 		sb.Reset()
-		sb.Write(render(s.Templates.selected, item))
+		_, _ = sb.Write(render(s.Templates.selected, item))
 		sb.Flush()
 	}
 
-	rl.Write([]byte(showCursor))
+	_, _ = rl.Write([]byte(showCursor))
 	rl.Close()
 
 	return s.list.Index(), fmt.Sprintf("%v", item), err
@@ -646,6 +649,6 @@ func render(tpl *template.Template, data interface{}) []byte {
 
 func clearScreen(sb *screenbuf.ScreenBuf) {
 	sb.Reset()
-	sb.Clear()
+	_ = sb.Clear()
 	sb.Flush()
 }
