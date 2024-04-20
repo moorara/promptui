@@ -7,12 +7,6 @@ import (
 	"github.com/moorara/promptui"
 )
 
-type pepper struct {
-	Name     string
-	HeatUnit int
-	Peppers  int
-}
-
 func main() {
 	validate := func(input string) error {
 		_, err := strconv.ParseFloat(input, 64)
