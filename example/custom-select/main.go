@@ -41,8 +41,8 @@ func main() {
 
 	searcher := func(input string, index int) bool {
 		pepper := peppers[index]
-		name := strings.Replace(strings.ToLower(pepper.Name), " ", "", -1)
-		input = strings.Replace(strings.ToLower(input), " ", "", -1)
+		name := strings.ReplaceAll(strings.ToLower(pepper.Name), " ", "")
+		input = strings.ReplaceAll(strings.ToLower(input), " ", "")
 
 		return strings.Contains(name, input)
 	}

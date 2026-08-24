@@ -12,7 +12,7 @@ func main() {
 	validate := func(input string) error {
 		_, err := strconv.ParseFloat(input, 64)
 		if err != nil {
-			return errors.New("Invalid number")
+			return errors.New("invalid number")
 		}
 		return nil
 	}

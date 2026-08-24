@@ -10,7 +10,7 @@ import (
 func main() {
 	validate := func(input string) error {
 		if len(input) < 6 {
-			return errors.New("Password must have more than 6 characters")
+			return errors.New("password must have more than 6 characters")
 		}
 		return nil
 	}
