@@ -196,7 +196,7 @@ func (p *Prompt) Run() (string, error) {
 			inputErr = nil
 		}
 
-		sb.Flush()
+		_ = sb.Flush()
 
 		return nil, 0, keepOn
 	})
@@ -228,9 +228,9 @@ func (p *Prompt) Run() (string, error) {
 
 		sb.Reset()
 		_, _ = sb.WriteString("")
-		sb.Flush()
+		_ = sb.Flush()
 		_, _ = rl.Write([]byte(showCursor))
-		rl.Close()
+		_ = rl.Close()
 
 		return "", err
 	}
@@ -259,11 +259,11 @@ func (p *Prompt) Run() (string, error) {
 	} else {
 		sb.Reset()
 		_, _ = sb.Write(prompt)
-		sb.Flush()
+		_ = sb.Flush()
 	}
 
 	_, _ = rl.Write([]byte(showCursor))
-	rl.Close()
+	_ = rl.Close()
 
 	return cur.Get(), err
 }

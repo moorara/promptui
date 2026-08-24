@@ -363,7 +363,7 @@ func (s *Select) innerRun(cursorPos, scroll int, top rune) (int, string, error) 
 			}
 		}
 
-		sb.Flush()
+		_ = sb.Flush()
 
 		return nil, 0, true
 	})
@@ -396,9 +396,9 @@ func (s *Select) innerRun(cursorPos, scroll int, top rune) (int, string, error) 
 
 		sb.Reset()
 		_, _ = sb.WriteString("")
-		sb.Flush()
+		_ = sb.Flush()
 		_, _ = rl.Write([]byte(showCursor))
-		rl.Close()
+		_ = rl.Close()
 
 		return 0, "", err
 	}
@@ -411,11 +411,11 @@ func (s *Select) innerRun(cursorPos, scroll int, top rune) (int, string, error) 
 	} else {
 		sb.Reset()
 		_, _ = sb.Write(render(s.Templates.selected, item))
-		sb.Flush()
+		_ = sb.Flush()
 	}
 
 	_, _ = rl.Write([]byte(showCursor))
-	rl.Close()
+	_ = rl.Close()
 
 	return s.list.Index(), fmt.Sprintf("%v", item), err
 }
@@ -529,10 +529,10 @@ func (s *Select) renderDetails(item interface{}) [][]byte {
 
 	err := s.Templates.details.Execute(w, item)
 	if err != nil {
-		fmt.Fprintf(w, "%v", item)
+		_, _ = fmt.Fprintf(w, "%v", item)
 	}
 
-	w.Flush()
+	_ = w.Flush()
 
 	output := buf.Bytes()
 
@@ -625,7 +625,7 @@ func (sa *SelectWithAdd) Run() (int, string, error) {
 		}
 
 		// XXX run through terminal for windows
-		os.Stdout.Write([]byte(upLine(1) + "\r" + clearLine))
+		_, _ = os.Stdout.Write([]byte(upLine(1) + "\r" + clearLine))
 	}
 
 	p := Prompt{
@@ -650,5 +650,5 @@ func render(tpl *template.Template, data interface{}) []byte {
 func clearScreen(sb *screenbuf.ScreenBuf) {
 	sb.Reset()
 	_ = sb.Clear()
-	sb.Flush()
+	_ = sb.Flush()
 }
